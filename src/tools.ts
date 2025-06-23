@@ -17,6 +17,7 @@ import { configureSearchTools } from "./tools/search.js";
 
 function configureAllTools(
   server: McpServer,
+  orgNameProvider: () => string,
   tokenProvider: () => Promise<AccessToken>,
   connectionProvider: () => Promise<WebApi>
 ) {
@@ -28,7 +29,7 @@ function configureAllTools(
     configureReleaseTools(server, tokenProvider, connectionProvider);
     configureWikiTools(server, tokenProvider, connectionProvider);
     configureTestPlanTools(server, tokenProvider, connectionProvider);
-    configureSearchTools(server, tokenProvider, connectionProvider);
+    configureSearchTools(server, orgNameProvider, tokenProvider, connectionProvider);
 }
 
 export { configureAllTools };

@@ -7,7 +7,6 @@ import { WebApi } from "azure-devops-node-api";
 import { IGitApi } from "azure-devops-node-api/GitApi.js";
 import { z } from "zod";
 import { apiVersion , userAgent } from "../utils.js";
-import { orgName } from "../index.js";
 import { VersionControlRecursionType } from "azure-devops-node-api/interfaces/GitInterfaces.js";
 import { GitItem } from "azure-devops-node-api/interfaces/GitInterfaces.js";
 
@@ -19,6 +18,7 @@ const SEARCH_TOOLS = {
 
 function configureSearchTools(
   server: McpServer,
+  orgNameProvider: () => string,
   tokenProvider: () => Promise<AccessToken>,
   connectionProvider: () => Promise<WebApi>
 ) {
@@ -52,6 +52,7 @@ server.tool(
   async ({  searchRequest }) => {
     const accessToken = await tokenProvider();
     const connection = await connectionProvider();
+    const orgName = await orgNameProvider();
     const url = `https://almsearch.dev.azure.com/${orgName}/_apis/search/codesearchresults?api-version=${apiVersion}`;
 
     const response = await fetch(url, {
@@ -107,6 +108,7 @@ server.tool(
   },
   async ({ searchRequest }) => {
     const accessToken = await tokenProvider();
+    const orgName = await orgNameProvider();
     const url = `https://almsearch.dev.azure.com/${orgName}/_apis/search/wikisearchresults?api-version=${apiVersion}`;
 
     const response = await fetch(url, {
@@ -156,6 +158,7 @@ server.tool(
   },
   async ({ searchRequest }) => {
     const accessToken = await tokenProvider();
+    const orgName = await orgNameProvider();
     const url = `https://almsearch.dev.azure.com/${orgName}/_apis/search/workitemsearchresults?api-version=${apiVersion}`;
 
     const response = await fetch(url, {
