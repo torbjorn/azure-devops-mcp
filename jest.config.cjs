@@ -33,6 +33,7 @@ module.exports = {
 
   moduleNameMapper: {
     '^(.+)/version\\.js$': '$1/version.ts',
-    '^(.+)/utils\\.js$': '$1/utils.ts'
+    '^(.+)/utils\\.js$': '$1/utils.ts',
+    '^(.+)/tools/(.+)\\.js$': '$1/tools/$2.ts'
   }
 };
