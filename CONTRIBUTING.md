@@ -26,9 +26,9 @@ For reference, see [this example of a well-formed issue](<repo>_issues/41).
 
 ## 👩‍💻 Writing code
 
-We are taking limited pull request during the public preview phase. If you notice something that should be changed or added, please create an issue first and provide details. Once reviewed, and it makes sens to proceed with the change, we will respond with a 👍.
+We are accepting a limited number of pull requests during the public preview phase. If you notice something that should be changed or added, please create an issue first and provide details. Once reviewed, and if it makes sense to proceed, we will respond with a 👍.
 
-Tests should be included in your pull request and it will not accepted untill the test are updated and passing.
+Please include tests with your pull request. Pull requests will not be accepted until all relevant tests are updated and passing.
 
 ## 🖊️ Coding style
 
