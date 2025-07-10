@@ -158,6 +158,12 @@ Ensure you are logged in to Azure DevOps via the Azure CLI:
 az login
 ```
 
+> **Multi-tenant scenarios:** If you have access to multiple Azure tenants, you may need to specify the tenant ID when configuring the MCP server. Use `az login --tenant <tenant-id>` to authenticate with a specific tenant before starting the MCP server.
+
+When working with a tenant that uses a guest user from another tenant to access the Azure Devops Organization. You will need to set the tenant Id in the MCP server settings to use the base tenant id.
+
+Ex. If the user is a guest of the contoso organization and the base tenant is fabrikam. You will need to set the tenant id to the fabrikam id.
+
 ### Installation
 
 #### ✨ One-Click Install
