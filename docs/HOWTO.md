@@ -175,15 +175,14 @@ List of work items for Stories backlog. But then go thru and find all the securi
 
 You can use the `format` paramater to indicate markdown formatting for large text fields. It is now available on the following tools:
 
- - **wit_update_work_items_batch**
- - **wit_add_child_work_items**
- - **wit_create_work_item**
+- **wit_update_work_items_batch**
+- **wit_add_child_work_items**
+- **wit_create_work_item**
 
- > 🚩 HTML is the default unless `Markdown` is explicity set.
+> 🚩 HTML is the default unless `Markdown` is explicity set.
 
 ```plaintext
 Update work item 12345 with a new description and use Markdown text. Use Markdown format param. Use bulk update.
 ```
+
 📽️ [Azure DevOps MCP Server: Using Markdown format for create and update work items](https://youtu.be/OD4c2m7Fj9U)
-
-
