@@ -602,14 +602,14 @@ describe("configureWorkItemTools", () => {
         fields: [
           { name: "System.Title", value: "Hello World!" },
           { name: "System.Description", value: "This is a sample task" },
-          { name: "System.AreaPath", value: "Contoso\\Development" }
+          { name: "System.AreaPath", value: "Contoso\\Development" },
         ],
       };
 
       const expectedDocument = [
         { op: "add", path: "/fields/System.Title", value: "Hello World!" },
         { op: "add", path: "/fields/System.Description", value: "This is a sample task" },
-        { op: "add", path: "/fields/System.AreaPath", value: "Contoso\\Development" }
+        { op: "add", path: "/fields/System.AreaPath", value: "Contoso\\Development" },
       ];
 
       const result = await handler(params);
@@ -636,14 +636,14 @@ describe("configureWorkItemTools", () => {
         workItemType: "Task",
         fields: [
           { name: "System.Title", value: "Hello World!" },
-          { name: "System.Description", value: longDescription, format: "Markdown" }
+          { name: "System.Description", value: longDescription, format: "Markdown" },
         ],
       };
 
       const expectedDocument = [
         { op: "add", path: "/fields/System.Title", value: "Hello World!" },
         { op: "add", path: "/fields/System.Description", value: longDescription },
-        { op: "add", path: "/multilineFieldsFormat/System.Description", value: "Markdown" }
+        { op: "add", path: "/multilineFieldsFormat/System.Description", value: "Markdown" },
       ];
 
       const result = await handler(params);
@@ -1089,7 +1089,7 @@ describe("configureWorkItemTools", () => {
         workItemType: "Task",
         fields: [
           { name: "System.Title", value: "Test Task" },
-          { name: "System.Description", value: "Test Description" }
+          { name: "System.Description", value: "Test Description" },
         ],
       };
 
@@ -1111,9 +1111,7 @@ describe("configureWorkItemTools", () => {
       const params = {
         project: "TestProject",
         workItemType: "Task",
-        fields: [
-          { name: "System.Title", value: "Test Task" }
-        ],
+        fields: [{ name: "System.Title", value: "Test Task" }],
       };
 
       const result = await handler(params);
@@ -1179,9 +1177,7 @@ describe("configureWorkItemTools", () => {
       const params = {
         project: "TestProject",
         workItemType: "Task",
-        fields: [
-          { name: "System.Title", value: "Test Task" }
-        ],
+        fields: [{ name: "System.Title", value: "Test Task" }],
       };
 
       const result = await handler(params);

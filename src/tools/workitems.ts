@@ -478,7 +478,8 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
             value: z.string().describe("The value of the field."),
             format: z.enum(["Html", "Markdown"]).optional().describe("the format of the field value, e.g., 'Html', 'Markdown'. Optional, defaults to 'Html'."),
           })
-        ).describe("A record of field names and values to set on the new work item. Each fild is the field name and each value is the corresponding value to set for that field."),
+        )
+        .describe("A record of field names and values to set on the new work item. Each fild is the field name and each value is the corresponding value to set for that field."),
     },
     async ({ project, workItemType, fields }) => {
       try {
