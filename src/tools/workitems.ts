@@ -580,6 +580,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
             id: z.number().describe("The ID of the work item to update."),
             path: z.string().describe("The path of the field to update, e.g., '/fields/System.Title'."),
             value: z.string().describe("The new value for the field. This is required for 'add' and 'replace' operations, and should be omitted for 'remove' operations."),
+            format: z.enum(["Html", "Markdown"]).optional().describe("The format of the field value. Only to be used for large text fields. e.g., 'Html', 'Markdown'. Optional, defaults to 'Html'."),
           })
         )
         .describe("An array of updates to apply to work items. Each update should include the operation (op), work item ID (id), field path (path), and new value (value)."),
@@ -592,20 +593,34 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
       // Extract unique IDs from the updates array
       const uniqueIds = Array.from(new Set(updates.map((update) => update.id)));
 
-      const body = uniqueIds.map((id) => ({
-        method: "PATCH",
-        uri: `/_apis/wit/workitems/${id}?api-version=${batchApiVersion}`,
-        headers: {
-          "Content-Type": "application/json-patch+json",
-        },
-        body: updates
-          .filter((update) => update.id === id)
-          .map(({ op, path, value }) => ({
-            op: op,
-            path: path,
-            value: value,
-          })),
-      }));
+      const body = uniqueIds.map((id) => {
+        const workItemUpdates = updates.filter((update) => update.id === id);
+        const operations = workItemUpdates.map(({ op, path, value }) => ({
+          op: op,
+          path: path,
+          value: value,
+        }));
+
+        // Add format operations for Markdown fields
+        workItemUpdates.forEach(({ path, value, format }) => {
+          if (format === "Markdown" && value && value.length > 50) {
+            operations.push({
+              op: "add",
+              path: `/multilineFieldsFormat${path.replace("/fields", "")}`,
+              value: "Markdown",
+            });
+          }
+        });
+
+        return {
+          method: "PATCH",
+          uri: `/_apis/wit/workitems/${id}?api-version=${batchApiVersion}`,
+          headers: {
+            "Content-Type": "application/json-patch+json",
+          },
+          body: operations,
+        };
+      });
 
       const response = await fetch(`${orgUrl}/_apis/wit/$batch?api-version=${batchApiVersion}`, {
         method: "PATCH",
