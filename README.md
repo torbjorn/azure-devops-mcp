@@ -137,7 +137,7 @@ Interact with these Azure DevOps services:
 Clone the repository, install dependencies, and add it to your MCP client configuration.
 
 [VS Code and GitHub Copilot](#%EF%B8%8F-visual-studio-code--github-copilot)<br/>
-[Visual Studio 2022 and GitHub Copilot](%EF%B8%8F-visual-studio-2022--github-copilot)
+[Visual Studio 2022 and GitHub Copilot](#%EF%B8%8F-visual-studio-2022--github-copilot)
 
 ### ➡️ Visual Studio Code & GitHub Copilot
 
