@@ -177,24 +177,24 @@ This installation method is the easiest for all users of Visual Studio Code.
 
 1. In your project, add a `.vscode\mcp.json` file with the following content:
 
-  ```json
-  {
-    "inputs": [
-     {
+```json
+{
+  "inputs": [
+    {
       "id": "ado_org",
       "type": "promptString",
       "description": "Azure DevOps organization name  (e.g. 'contoso')"
-     }
-    ],
-    "servers": {
-     "ado": {
+    }
+  ],
+  "servers": {
+    "ado": {
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@azure-devops/mcp", "${input:ado_org}"]
-     }
     }
   }
-  ```
+}
+```
 
 2. Save the file, then click 'Start'.
 
@@ -214,29 +214,31 @@ This installation method is recommended for advanced users and contributors who 
 
 1. Clone the repository.
 2. Install dependencies:
-  ```sh
-  npm install
-  ```
+
+```sh
+npm install
+```
+
 3. Edit or add `.vscode/mcp.json`:
 
-  ```json
-  {
-    "inputs": [
-     {
+```json
+{
+  "inputs": [
+    {
       "id": "ado_org",
       "type": "promptString",
       "description": "Azure DevOps organization's name  (e.g. 'contoso')"
-     }
-    ],
-    "servers": {
-     "ado": {
+    }
+  ],
+  "servers": {
+    "ado": {
       "type": "stdio",
       "command": "mcp-server-azuredevops",
       "args": ["${input:ado_org}"]
-     }
     }
   }
-  ```
+}
+```
 
 4. Start the Azure DevOps MCP Server.
 
@@ -276,24 +278,24 @@ This installation method is the easiest for all users of Visual Studio 2022.
 
 1. Add a `.mcp.json` file to the solution folder with the following content:
 
-  ```json
-  {
-    "inputs": [
-     {
+```json
+{
+  "inputs": [
+    {
       "id": "ado_org",
       "type": "promptString",
       "description": "Azure DevOps organization name  (e.g. 'contoso')"
-     }
-    ],
-    "servers": {
-     "ado": {
+    }
+  ],
+  "servers": {
+    "ado": {
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@azure-devops/mcp", "${input:ado_org}"]
-     }
     }
   }
-  ```
+}
+```
 
 2. Save the file.
 3. Add your organization name by clicking on the `input` option.
