@@ -438,7 +438,10 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
       updates: z
         .array(
           z.object({
-            op: z.enum(getEnumKeys(Operation).filter(key => key === "Add" || key === "Replace" || key === "Remove") as [string, ...string[]]).default("Add").describe("The operation to perform on the field."),
+            op: z
+              .enum(getEnumKeys(Operation).filter((key) => key === "Add" || key === "Replace" || key === "Remove") as [string, ...string[]])
+              .default("Add")
+              .describe("The operation to perform on the field."),
             path: z.string().describe("The path of the field to update, e.g., '/fields/System.Title'."),
             value: z.string().describe("The new value for the field. This is required for 'Add' and 'Replace' operations, and should be omitted for 'Remove' operations."),
           })
@@ -448,13 +451,13 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
     async ({ id, updates }) => {
       const connection = await connectionProvider();
       const workItemApi = await connection.getWorkItemTrackingApi();
-      
+
       // Convert operation names to lowercase for API
-      const apiUpdates = updates.map(update => ({
+      const apiUpdates = updates.map((update) => ({
         ...update,
-        op: operationToApiString(update.op)
+        op: operationToApiString(update.op),
       }));
-      
+
       const updatedWorkItem = await workItemApi.updateWorkItem(null, apiUpdates, id);
 
       return {
@@ -548,7 +551,10 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
     {
       project: z.string().describe("The name or ID of the Azure DevOps project."),
       query: z.string().describe("The ID or path of the query to retrieve."),
-      expand: z.enum(getEnumKeys(QueryExpand) as [string, ...string[]]).optional().describe("Optional expand parameter to include additional details in the response. Defaults to 'None'."),
+      expand: z
+        .enum(getEnumKeys(QueryExpand) as [string, ...string[]])
+        .optional()
+        .describe("Optional expand parameter to include additional details in the response. Defaults to 'None'."),
       depth: z.number().default(0).describe("Optional depth parameter to specify how deep to expand the query. Defaults to 0."),
       includeDeleted: z.boolean().default(false).describe("Whether to include deleted items in the query results. Defaults to false."),
       useIsoDateFormat: z.boolean().default(false).describe("Whether to use ISO date format in the response. Defaults to false."),
@@ -594,7 +600,10 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
       updates: z
         .array(
           z.object({
-            op: z.enum(getEnumKeys(Operation).filter(key => key === "Add" || key === "Replace" || key === "Remove") as [string, ...string[]]).default("Add").describe("The operation to perform on the field."),
+            op: z
+              .enum(getEnumKeys(Operation).filter((key) => key === "Add" || key === "Replace" || key === "Remove") as [string, ...string[]])
+              .default("Add")
+              .describe("The operation to perform on the field."),
             id: z.number().describe("The ID of the work item to update."),
             path: z.string().describe("The path of the field to update, e.g., '/fields/System.Title'."),
             value: z.string().describe("The new value for the field. This is required for 'add' and 'replace' operations, and should be omitted for 'remove' operations."),

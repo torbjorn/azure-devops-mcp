@@ -114,7 +114,9 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<Acce
     {
       repositoryId: z.string().describe("The ID of the repository where the pull request exists."),
       pullRequestId: z.number().describe("The ID of the pull request to be published."),
-      status: z.enum(getEnumKeys(PullRequestStatus).filter(key => key === "Active" || key === "Abandoned") as [string, ...string[]]).describe("The new status of the pull request. Can be 'Active' or 'Abandoned'."),
+      status: z
+        .enum(getEnumKeys(PullRequestStatus).filter((key) => key === "Active" || key === "Abandoned") as [string, ...string[]])
+        .describe("The new status of the pull request. Can be 'Active' or 'Abandoned'."),
     },
     async ({ repositoryId, pullRequestId, status }) => {
       const connection = await connectionProvider();
@@ -209,7 +211,10 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<Acce
       skip: z.number().default(0).describe("The number of pull requests to skip."),
       created_by_me: z.boolean().default(false).describe("Filter pull requests created by the current user."),
       i_am_reviewer: z.boolean().default(false).describe("Filter pull requests where the current user is a reviewer."),
-      status: z.enum(getEnumKeys(PullRequestStatus) as [string, ...string[]]).default("Active").describe("Filter pull requests by status. Defaults to 'Active'."),
+      status: z
+        .enum(getEnumKeys(PullRequestStatus) as [string, ...string[]])
+        .default("Active")
+        .describe("Filter pull requests by status. Defaults to 'Active'."),
     },
     async ({ repositoryId, top, skip, created_by_me, i_am_reviewer, status }) => {
       const connection = await connectionProvider();
@@ -275,7 +280,10 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<Acce
       skip: z.number().default(0).describe("The number of pull requests to skip."),
       created_by_me: z.boolean().default(false).describe("Filter pull requests created by the current user."),
       i_am_reviewer: z.boolean().default(false).describe("Filter pull requests where the current user is a reviewer."),
-      status: z.enum(getEnumKeys(PullRequestStatus) as [string, ...string[]]).default("Active").describe("Filter pull requests by status. Defaults to 'Active'."),
+      status: z
+        .enum(getEnumKeys(PullRequestStatus) as [string, ...string[]])
+        .default("Active")
+        .describe("Filter pull requests by status. Defaults to 'Active'."),
     },
     async ({ project, top, skip, created_by_me, i_am_reviewer, status }) => {
       const connection = await connectionProvider();
