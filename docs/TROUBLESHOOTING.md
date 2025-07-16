@@ -41,6 +41,7 @@
 
 2. **Dependency Installation Errors**
    If `npm install` fails, verify that you are using Node.js version 20 or higher. You can check your Node.js version with:
+
    ```pwsh
    node -v
    ```
