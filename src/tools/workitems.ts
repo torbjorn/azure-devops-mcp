@@ -439,7 +439,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
         .array(
           z.object({
             op: z
-              .enum(getEnumKeys(Operation).filter((key) => key === "Add" || key === "Replace" || key === "Remove") as [string, ...string[]])
+              .enum(["Add", "Replace", "Remove"])
               .default("Add")
               .describe("The operation to perform on the field."),
             path: z.string().describe("The path of the field to update, e.g., '/fields/System.Title'."),
@@ -601,7 +601,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
         .array(
           z.object({
             op: z
-              .enum(getEnumKeys(Operation).filter((key) => key === "Add" || key === "Replace" || key === "Remove") as [string, ...string[]])
+              .enum(["Add", "Replace", "Remove"])
               .default("Add")
               .describe("The operation to perform on the field."),
             id: z.number().describe("The ID of the work item to update."),
@@ -632,7 +632,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
         workItemUpdates.forEach(({ path, value, format }) => {
           if (format === "Markdown" && value && value.length > 50) {
             operations.push({
-              op: "add",
+              op: "Add",
               path: `/multilineFieldsFormat${path.replace("/fields", "")}`,
               value: "Markdown",
             });
