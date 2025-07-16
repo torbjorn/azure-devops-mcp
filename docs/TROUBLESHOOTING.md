@@ -72,7 +72,7 @@ The MCP server may be authenticating with a different tenant than your Azure Dev
    az account list
    ```
 
-   Look for the `tenantId` field in the output for the desired tenant(for guest accounts this will be the tenant of your organization and may be different than the Azure Devops Organization tenant).
+   Look for the `tenantId` field in the output for the desired tenant (for guest accounts this will be the tenant of your organization and may be different than the Azure Devops Organization tenant).
 
 2. **Configure the MCP server with the tenant ID** by updating your `.vscode/mcp.json`:
 

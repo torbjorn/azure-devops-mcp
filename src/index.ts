@@ -6,7 +6,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import * as azdev from "azure-devops-node-api";
-import { AccessToken, DefaultAzureCredential, AzureCliCredential, ChainedTokenCredential } from "@azure/identity";
+import { AccessToken, AzureCliCredential, ChainedTokenCredential, DefaultAzureCredential, TokenCredential } from "@azure/identity";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { configurePrompts } from "./prompts.js";
@@ -43,23 +43,18 @@ async function getAzureDevOpsToken(): Promise<AccessToken> {
   } else {
     process.env.AZURE_TOKEN_CREDENTIALS = "dev";
   }
-  const credentialOptions = tenantId ? { tenantId } : {};
-
-  // Use Azure CLI credential if tenantId is provided for multi-tenant scenarios
-  if(tenantId){
-    const credentialOptions = tenantId ? { tenantId } : {};
-
-    const azureCliCredential = new AzureCliCredential(credentialOptions);
-    
-    const chainedCredential = new ChainedTokenCredential(azureCliCredential, new DefaultAzureCredential(credentialOptions));
-    
-    const token = await chainedCredential.getToken("499b84ac-1321-427f-aa17-267ca6975798/.default");
-    return token;
+  
+  let credential: TokenCredential = new DefaultAzureCredential(); // CodeQL [SM05138] resolved by explicitly setting AZURE_TOKEN_CREDENTIALS
+  if (tenantId) {
+    // Use Azure CLI credential if tenantId is provided for multi-tenant scenarios
+    const azureCliCredential = new AzureCliCredential({ tenantId });
+    credential = new ChainedTokenCredential(azureCliCredential, credential);
   }
-
-  const credential = new DefaultAzureCredential(); // CodeQL [SM05138] resolved by explicitly setting AZURE_TOKEN_CREDENTIALS
   
   const token = await credential.getToken("499b84ac-1321-427f-aa17-267ca6975798/.default");
+  if (!token) {
+    throw new Error("Failed to obtain Azure DevOps token. Ensure you have Azure CLI logged in or another token source setup correctly.");
+  }
   return token;
 }
 
