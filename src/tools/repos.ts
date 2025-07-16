@@ -114,9 +114,7 @@ function configureRepoTools(server: McpServer, tokenProvider: () => Promise<Acce
     {
       repositoryId: z.string().describe("The ID of the repository where the pull request exists."),
       pullRequestId: z.number().describe("The ID of the pull request to be published."),
-      status: z
-        .enum(["Active", "Abandoned"])
-        .describe("The new status of the pull request. Can be 'Active' or 'Abandoned'."),
+      status: z.enum(["Active", "Abandoned"]).describe("The new status of the pull request. Can be 'Active' or 'Abandoned'."),
     },
     async ({ repositoryId, pullRequestId, status }) => {
       const connection = await connectionProvider();

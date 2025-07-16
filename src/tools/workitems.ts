@@ -438,10 +438,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
       updates: z
         .array(
           z.object({
-            op: z
-              .enum(["Add", "Replace", "Remove"])
-              .default("Add")
-              .describe("The operation to perform on the field."),
+            op: z.enum(["Add", "Replace", "Remove"]).default("Add").describe("The operation to perform on the field."),
             path: z.string().describe("The path of the field to update, e.g., '/fields/System.Title'."),
             value: z.string().describe("The new value for the field. This is required for 'Add' and 'Replace' operations, and should be omitted for 'Remove' operations."),
           })
@@ -600,10 +597,7 @@ function configureWorkItemTools(server: McpServer, tokenProvider: () => Promise<
       updates: z
         .array(
           z.object({
-            op: z
-              .enum(["Add", "Replace", "Remove"])
-              .default("Add")
-              .describe("The operation to perform on the field."),
+            op: z.enum(["Add", "Replace", "Remove"]).default("Add").describe("The operation to perform on the field."),
             id: z.number().describe("The ID of the work item to update."),
             path: z.string().describe("The path of the field to update, e.g., '/fields/System.Title'."),
             value: z.string().describe("The new value for the field. This is required for 'add' and 'replace' operations, and should be omitted for 'remove' operations."),
