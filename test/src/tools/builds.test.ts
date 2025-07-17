@@ -60,7 +60,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Build",
-        status: "Retry",
+        status: "Retry" as keyof typeof StageUpdateType,
         forceRetryAllJobs: true,
       };
 
@@ -74,7 +74,7 @@ describe("configureBuildTools", () => {
         },
         body: JSON.stringify({
           forceRetryAllJobs: true,
-          state: 1, // StageUpdateType.Retry
+          state: StageUpdateType.Retry,
         }),
       });
       expect(result.content[0].text).toBe(JSON.stringify(JSON.stringify(mockUpdateBuildStageResponse), null, 2));
@@ -103,7 +103,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 999,
         stageName: "NonExistentStage",
-        status: "Retry",
+        status: "Retry" as keyof typeof StageUpdateType,
         forceRetryAllJobs: false,
       };
 
@@ -140,7 +140,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Build",
-        status: "Retry",
+        status: "Retry" as keyof typeof StageUpdateType,
         forceRetryAllJobs: false,
       };
 
@@ -154,7 +154,7 @@ describe("configureBuildTools", () => {
         },
         body: JSON.stringify({
           forceRetryAllJobs: false,
-          state: 1, // StageUpdateType.Retry
+          state: StageUpdateType.Retry,
         }),
       });
     });
@@ -173,7 +173,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Build",
-        status: "Retry",
+        status: "Retry" as keyof typeof StageUpdateType,
         forceRetryAllJobs: false,
       };
 
@@ -202,7 +202,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Deploy",
-        status: "Cancel",
+        status: "Cancel" as keyof typeof StageUpdateType,
         forceRetryAllJobs: false,
       };
 
@@ -213,7 +213,7 @@ describe("configureBuildTools", () => {
         expect.objectContaining({
           body: JSON.stringify({
             forceRetryAllJobs: false,
-            state: 0, // StageUpdateType.Cancel
+            state: StageUpdateType.Cancel,
           }),
         })
       );
