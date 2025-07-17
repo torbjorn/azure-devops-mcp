@@ -60,7 +60,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Build",
-        status: "Retry" as keyof typeof StageUpdateType,
+        status: StageUpdateType.Retry.toString(),
         forceRetryAllJobs: true,
       };
 
@@ -103,7 +103,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 999,
         stageName: "NonExistentStage",
-        status: "Retry" as keyof typeof StageUpdateType,
+        status: StageUpdateType.Retry.toString(),
         forceRetryAllJobs: false,
       };
 
@@ -117,7 +117,7 @@ describe("configureBuildTools", () => {
         },
         body: JSON.stringify({
           forceRetryAllJobs: false,
-          state: 1, // StageUpdateType.Retry
+          state: StageUpdateType.Retry.valueOf(),
         }),
       });
     });
@@ -140,7 +140,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Build",
-        status: "Retry" as keyof typeof StageUpdateType,
+        status: StageUpdateType.Retry.toString(),
         forceRetryAllJobs: false,
       };
 
@@ -154,7 +154,7 @@ describe("configureBuildTools", () => {
         },
         body: JSON.stringify({
           forceRetryAllJobs: false,
-          state: StageUpdateType.Retry,
+          state: StageUpdateType.Retry.valueOf(),
         }),
       });
     });
@@ -173,7 +173,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Build",
-        status: "Retry" as keyof typeof StageUpdateType,
+        status: StageUpdateType.Retry.toString(),
         forceRetryAllJobs: false,
       };
 
@@ -202,7 +202,7 @@ describe("configureBuildTools", () => {
         project: "test-project",
         buildId: 123,
         stageName: "Deploy",
-        status: "Cancel" as keyof typeof StageUpdateType,
+        status: StageUpdateType.Cancel.toString(),
         forceRetryAllJobs: false,
       };
 
@@ -213,7 +213,7 @@ describe("configureBuildTools", () => {
         expect.objectContaining({
           body: JSON.stringify({
             forceRetryAllJobs: false,
-            state: StageUpdateType.Cancel,
+            state: StageUpdateType.Cancel.valueOf(),
           }),
         })
       );

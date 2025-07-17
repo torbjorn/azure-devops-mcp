@@ -332,7 +332,7 @@ function configureBuildTools(server: McpServer, tokenProvider: () => Promise<Acc
 
       const body = {
         forceRetryAllJobs: forceRetryAllJobs,
-        state: StageUpdateType[status as keyof typeof StageUpdateType],
+        state: StageUpdateType[StageUpdateType[status as keyof typeof StageUpdateType] as unknown as keyof typeof StageUpdateType],
       };
 
       const response = await fetch(endpoint, {
