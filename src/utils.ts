@@ -5,7 +5,7 @@ import { packageVersion } from "./version.js";
 
 export const apiVersion = "7.2-preview.1";
 export const batchApiVersion = "5.0";
-export const userAgent = `AzureDevOps.MCP/${packageVersion} (local)`;
+export const markdownCommentsApiVersion = "7.2-preview.4";
 
 /**
  * Converts a TypeScript numeric enum to an array of string keys for use with z.enum().
