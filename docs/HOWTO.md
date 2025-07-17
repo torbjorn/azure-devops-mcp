@@ -169,5 +169,5 @@ For the Azure DevOps MCP Server, use the following command:
 ```
 claude mcp add azure-devops -- npx -y @azure-devops/mcp Contoso
 ```
-Replace `Contoso` with your own organization name
 
+Replace `Contoso` with your own organization name
