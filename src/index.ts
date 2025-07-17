@@ -31,11 +31,17 @@ const argv = yargs(hideBin(process.argv))
     describe: "Azure tenant ID (optional, required for multi-tenant scenarios)",
     type: "string",
   })
+  .option("pat", {
+    alias: "p",
+    describe: "Personal Access Token (optional, alternative to OAuth authentication)",
+    type: "string",
+  })
   .help()
   .parseSync();
 
 export const orgName = argv.organization as string;
 const tenantId = argv.tenant;
+const personalAccessToken = argv.pat || process.env.AZURE_DEVOPS_PAT;
 const orgUrl = "https://dev.azure.com/" + orgName;
 
 async function getAzureDevOpsToken(): Promise<AccessToken> {
@@ -60,8 +66,17 @@ async function getAzureDevOpsToken(): Promise<AccessToken> {
 
 function getAzureDevOpsClient(userAgentComposer: UserAgentComposer): () => Promise<azdev.WebApi> {
   return async () => {
-    const token = await getAzureDevOpsToken();
-    const authHandler = azdev.getBearerHandler(token.token);
+    let authHandler;
+    
+    if (personalAccessToken) {
+      // Use Personal Access Token authentication
+      authHandler = azdev.getPersonalAccessTokenHandler(personalAccessToken);
+    } else {
+      // Use OAuth authentication
+      const token = await getAzureDevOpsToken();
+      authHandler = azdev.getBearerHandler(token.token);
+    }
+    
     const connection = new azdev.WebApi(orgUrl, authHandler, undefined, {
       productName: "AzureDevOps.MCP",
       productVersion: packageVersion,
@@ -84,7 +99,20 @@ async function main() {
 
   configurePrompts(server);
 
-  configureAllTools(server, getAzureDevOpsToken, getAzureDevOpsClient(userAgentComposer), () => userAgentComposer.userAgent);
+  // Create a token provider that works with both OAuth and PAT
+  const tokenProvider = async (): Promise<AccessToken> => {
+    if (personalAccessToken) {
+      // For PAT, we create a mock AccessToken object
+      return {
+        token: personalAccessToken,
+        expiresOnTimestamp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours from now
+      };
+    } else {
+      return await getAzureDevOpsToken();
+    }
+  };
+
+  configureAllTools(server, tokenProvider, getAzureDevOpsClient(userAgentComposer), () => userAgentComposer.userAgent);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
