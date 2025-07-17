@@ -74,7 +74,7 @@ describe("configureBuildTools", () => {
         },
         body: JSON.stringify({
           forceRetryAllJobs: true,
-          state: StageUpdateType.Retry,
+          state: StageUpdateType.Retry.valueOf(),
         }),
       });
       expect(result.content[0].text).toBe(JSON.stringify(JSON.stringify(mockUpdateBuildStageResponse), null, 2));
