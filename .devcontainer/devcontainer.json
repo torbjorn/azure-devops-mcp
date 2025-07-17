@@ -11,7 +11,10 @@
     },
     "ghcr.io/devcontainers/features/azure-cli:1": {}
   },
-  "postCreateCommand": "rm -f .npmrc && npm install && npm install -g . ; az login --use-device-code",
+  "mounts": [
+    "source=${env:HOME}/.azure,target=/home/node/.azure,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "rm -f .npmrc && npm install && npm install -g .",
   "customizations": {
     "codespaces": {
       "openFiles": ["CONTRIBUTING.md"]
@@ -20,5 +23,8 @@
       "extensions": ["ms-azuretools.vscode-docker", "EditorConfig.EditorConfig", "GitHub.copilot", "dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-vscode.vscode-typescript-next"]
     }
   },
-  "remoteUser": "node"
+  "remoteUser": "node",
+  "runArgs": [
+    "--user", "${localEnv:UID}:${localEnv:GID}"
+  ]
 }
