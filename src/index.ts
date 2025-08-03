@@ -14,6 +14,7 @@ import { configurePrompts } from "./prompts.js";
 import { configureAllTools } from "./tools.js";
 import { UserAgentComposer } from "./useragent.js";
 import { packageVersion } from "./version.js";
+import { getPersonalAccessToken as getPatFromAuth } from "./auth.js";
 
 // Parse command line arguments using yargs
 const argv = yargs(hideBin(process.argv))
@@ -41,10 +42,17 @@ const argv = yargs(hideBin(process.argv))
 
 export const orgName = argv.organization as string;
 const tenantId = argv.tenant;
-const personalAccessToken = argv.pat || process.env.AZURE_DEVOPS_PAT;
 const orgUrl = "https://dev.azure.com/" + orgName;
 
-async function getAzureDevOpsToken(): Promise<AccessToken> {
+// Exported for testing
+export function getPersonalAccessToken(cliPat?: string): string | undefined {
+  return getPatFromAuth(cliPat);
+}
+
+const personalAccessToken = getPersonalAccessToken(argv.pat);
+
+// Exported for testing
+export async function getAzureDevOpsToken(): Promise<AccessToken> {
   if (process.env.ADO_MCP_AZURE_TOKEN_CREDENTIALS) {
     process.env.AZURE_TOKEN_CREDENTIALS = process.env.ADO_MCP_AZURE_TOKEN_CREDENTIALS;
   } else {
@@ -64,7 +72,8 @@ async function getAzureDevOpsToken(): Promise<AccessToken> {
   return token;
 }
 
-function getAzureDevOpsClient(userAgentComposer: UserAgentComposer): () => Promise<azdev.WebApi> {
+// Exported for testing
+export function getAzureDevOpsClient(userAgentComposer: UserAgentComposer, personalAccessToken?: string): () => Promise<azdev.WebApi> {
   return async () => {
     let authHandler;
     
@@ -86,6 +95,21 @@ function getAzureDevOpsClient(userAgentComposer: UserAgentComposer): () => Promi
   };
 }
 
+// Exported for testing
+export async function createTokenProvider(personalAccessToken?: string): Promise<() => Promise<AccessToken>> {
+  return async (): Promise<AccessToken> => {
+    if (personalAccessToken) {
+      // For PAT, we create a mock AccessToken object
+      return {
+        token: personalAccessToken,
+        expiresOnTimestamp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours from now
+      };
+    } else {
+      return await getAzureDevOpsToken();
+    }
+  };
+}
+
 async function main() {
   const server = new McpServer({
     name: "Azure DevOps MCP Server",
@@ -99,20 +123,9 @@ async function main() {
 
   configurePrompts(server);
 
-  // Create a token provider that works with both OAuth and PAT
-  const tokenProvider = async (): Promise<AccessToken> => {
-    if (personalAccessToken) {
-      // For PAT, we create a mock AccessToken object
-      return {
-        token: personalAccessToken,
-        expiresOnTimestamp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours from now
-      };
-    } else {
-      return await getAzureDevOpsToken();
-    }
-  };
+  const tokenProvider = await createTokenProvider(personalAccessToken);
 
-  configureAllTools(server, tokenProvider, getAzureDevOpsClient(userAgentComposer), () => userAgentComposer.userAgent);
+  configureAllTools(server, tokenProvider, getAzureDevOpsClient(userAgentComposer, personalAccessToken), () => userAgentComposer.userAgent);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
